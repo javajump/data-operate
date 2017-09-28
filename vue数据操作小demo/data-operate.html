@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="stylesheet" href="bootstrap.css">
+	<script src="jquery.js"></script>
+	<script src="bootstrap.js"></script>
+	<script src="vue.js"></script>
+	<script>
+		window.onload=function(){
+			new Vue({
+				el:"#app",
+				data:{
+					userData:[],
+					username:"test",
+					grade:"data",
+					nowIndex:""
+				},
+				methods:{
+					add:function(){
+						this.userData.push({
+							mingzi:this.username,
+							fenshu:this.grade
+						});
+						this.username="",
+						this.grade=""
+					},
+					deleteMsg:function(n){
+						if(n==-666){
+							this.userData=[]
+						}else{
+							this.userData.splice(n,1);
+						}
+						
+					}
+				}
+			})
+		}
+	</script>
+</head>
+<body>
+	<div id="app" class="container">
+		<!-- 表单 -->
+		<form action="" >
+			<div class="form-group" >
+				<label for="usernane">用户名:</label>
+				<input type="text" id="username" class="form-control" placeholder="请输入用户名" v-model="username">
+			</div>
+			<div class="form-group">
+				<label for="grade">成绩:</label>
+				<input type="text" id="grade" class="form-control" placeholder="请输入成绩" v-model="grade">
+			</div>
+			<div class="form-group">
+				<button type="button" class="btn btn-info" v-on:click="add">添加</button>
+				<button type="reset" class="btn btn-danger">重置</button>
+			</div>
+		</form>
+		<hr>
+		<table class="table table-bordered table-hover">
+			<caption>信息表</caption>
+			<tr >
+				<th class="text-center">序号</th>
+				<th class="text-center">名字</th>
+				<th class="text-center">分数</th>
+				<th class="text-center">是否删除数据</th>
+			</tr>
+			<!-- 表格数据 -->
+			<tr v-for="(item,index) in userData">
+				<td class="text-center" >{{index+1}}</td>
+				<td class="text-center">{{item.mingzi}}</td>
+				<td class="text-center">{{item.fenshu}}</td>
+				<td class="text-center">
+					<button type="button" data-toggle="modal" data-target="#layer" v-on:click="nowIndex=index" class="btn btn-danger btn-sm">删除该项</button>
+				</td>
+			</tr>
+			<tr>
+				<td class="text-right" colspan="4"><button class="btn btn-danger" data-toggle="modal" data-target="#layer" v-on:click="nowIndex=-666">删除全部</button></td>
+			</tr>
+		</table>
+			<!-- Modal -->
+        <div  role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                        <h4 class="modal-title">确认删除么?</h4>
+                    </div>
+                    <div class="modal-body text-right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" v-on:click="deleteMsg(nowIndex)">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+	</div>
+
+</body>
+</html>
